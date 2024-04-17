@@ -9,3 +9,4 @@ include(CTest)
 
 add_subdirectory(mtest)
 add_subdirectory(safe_input)
+add_subdirectory(msignal)
