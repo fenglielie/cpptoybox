@@ -6,3 +6,4 @@ zero_init_quiet()
 zero_info()
 
 add_subdirectory(mtest)
+add_subdirectory(safe_input)
