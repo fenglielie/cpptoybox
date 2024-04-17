@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
+project(cpptoybox VERSION 0.1)
+include(cmake/zero.cmake)
+
+zero_init_quiet()
+zero_info()
+
+add_subdirectory(mtest)
