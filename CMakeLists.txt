@@ -5,5 +5,7 @@ include(cmake/zero.cmake)
 zero_init_quiet()
 zero_info()
 
+include(CTest)
+
 add_subdirectory(mtest)
 add_subdirectory(safe_input)
