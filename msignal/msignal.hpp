@@ -6,7 +6,7 @@
 // 基于std::list在发送元和接收元内部记录链表
 
 // 把两个基类放置在m_signal子命名空间
-// MSender和MReceiver放置在Mzcy命名空间
+// MSender和MReceiver放置在m_signal命名空间
 // 使用bind和unbind两个方法进行绑定和解绑, 发送元和接收元都可以发起, 而且等价
 
 namespace m_signal {
