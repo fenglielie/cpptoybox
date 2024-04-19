@@ -1,4 +1,5 @@
 // main.cpp
+#include <format>
 #include <string>
 
 #include "msignal.hpp"
@@ -19,14 +20,14 @@ public:
 
     // receiver_exec会调用这个方法
     void method(int m) {
-        printf("     %s receive %d (%lld)\n", m_the_name.c_str(), m,
-               int_receiver_kernel.num());
-        if (int_sender_kernel.num() > 0) emit(m);
+        std::cout << std::format("     {} receive {} ({})\n", m_the_name, m,
+                                 int_receiver_kernel.num());
+        if (int_sender_kernel.num() > 0) { emit(m); }
     }
 
     void emit(int m) {
-        printf("%s send %d: (%lld)\n", m_the_name.c_str(), m,
-               int_sender_kernel.num());
+        std::cout << std::format("{} send {}: ({})\n", m_the_name, m,
+                                 int_sender_kernel.num());
         int_sender_kernel.exec(m);
     }
 };
@@ -45,8 +46,8 @@ public:
     }
 
     void emit(int m) {
-        printf("%s send %d: (%lld)\n", m_the_name.c_str(), m,
-               int_sender_kernel.num());
+        std::cout << std::format("{} send {}: ({})\n", m_the_name, m,
+                                 int_sender_kernel.num());
         int_sender_kernel.exec(m);
     }
 };

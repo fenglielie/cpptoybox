@@ -148,8 +148,7 @@ public:
     // 绑定发送元
     void detail_receiver_bind(m_signal::MSenderBase<Ym> *sender) {
         if (detail_receiver_append(sender)) {
-            sender->detail_sender_append(
-                this);  // 添加新的发送元时, 通知发送元
+            sender->detail_sender_append(this);  // 添加新的发送元时, 通知发送元
         }
     }
 

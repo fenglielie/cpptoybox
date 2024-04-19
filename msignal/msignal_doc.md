@@ -88,10 +88,9 @@ public:
         int_receiver_kernel.init(this, &TestReceiver::method);
     }
 
-    // 接收元件在收到消息后，会调用这个方法
     void method(int m) {
-        printf("     %s receive %d (%lld)\n", m_name.c_str(), m,
-               int_receiver_kernel.num());
+        // 接受元会自动调用这个方法
+        std::cout << std::format("     {} receive {} ({})\n", m_name, m, int_receiver_kernel.num());
     }
 };
 ```
