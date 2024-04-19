@@ -14,9 +14,9 @@ jobs:
     name: run bvt with g++ 13
 
   run-bvt-clang15:
-    uses: fenglielie/cmakezero/.github/workflows/bvt-clang18.yml
+    uses: fenglielie/cmakezero/.github/workflows/bvt-clang18.yml@main
     name: run bvt with clang 18
 
   run-bvt-msvc14:
-    uses: fenglielie/cmakezero/.github/workflows/bvt-msvc17.yml
+    uses: fenglielie/cmakezero/.github/workflows/bvt-msvc17.yml@main
     name: run bvt with msvc17 (vs2022)
