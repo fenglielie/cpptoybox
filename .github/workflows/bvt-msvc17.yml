@@ -23,4 +23,4 @@ jobs:
     - name: run tests
       run: |
         cd ./build
-        ctest -j8
+        ctest -j8 -C Release
