@@ -1,0 +1,5 @@
+add_executable(data_handler_demo data_handler_demo.cpp)
+target_include_directories(data_handler_demo PRIVATE ..)
+zero_target_preset_definitions(data_handler_demo)
+
+add_test(NAME data_handler_demo COMMAND data_handler_demo)
