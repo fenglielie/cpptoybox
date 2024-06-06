@@ -4,6 +4,7 @@ include(cmake/zero.cmake)
 
 zero_init_quiet()
 zero_info()
+zero_add_my_rpath()
 
 include(CTest)
 
