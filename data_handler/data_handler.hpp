@@ -8,9 +8,9 @@
 #include <tuple>
 #include <vector>
 
-#if __cplusplus >= 202002L
+#if __has_include(<format>)
 #include <format>
-#define HAS_FORMAT_SUPPORT
+#define USE_FORMAT
 #endif
 
 class FileRAII {
@@ -126,7 +126,7 @@ private:
                                       char delimiter) {
         if constexpr (I < sizeof...(Args)) {
             // 写入数据
-#ifdef HAS_FORMAT_SUPPORT
+#ifdef USE_FORMAT
             os << std::format("{}", std::get<I>(t));
 #else
             os << std::get<I>(t);
