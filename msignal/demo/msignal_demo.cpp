@@ -60,8 +60,13 @@ public:
     }
 
     void emit(int m) {
+#ifdef USE_FORMAT
         std::cout << std::format("{} send {}: ({})\n", m_the_name, m,
                                  int_sender_kernel.num());
+#else
+        std::cout << m_the_name << " send " << m << ": ("
+                  << int_sender_kernel.num() << ")\n";
+#endif
         int_sender_kernel.exec(m);
     }
 };
