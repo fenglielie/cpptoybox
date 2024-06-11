@@ -142,6 +142,3 @@ private:
     }
 };
 
-#ifdef HAS_FORMAT_SUPPORT
-#undef HAS_FORMAT_SUPPORT
-#endif
