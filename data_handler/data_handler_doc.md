@@ -53,7 +53,7 @@ using LineType = std::tuple<int,int,double>;
 - `read`支持`#`开头的注释，包括整行注释和行尾注释，同时`read`不支持`#`作为分隔符；
 - `read`会自动跳过空行，自动将`\t`，`\r`替换为空格；
 - `write`在写入时，不会在行内最后一个元素之后加上分隔符；
-- `read`始终采用`>> item`从输入流中获取数据，`write`对于C++20之前采用`<< item`向输出流传递数据，对于C++20则采用`<< std::format("{}",item)`。
+- `read`始终采用`>> item`从输入流中获取数据，`write`采用`<< item`向输出流传递数据。
 
 
 使用示例：

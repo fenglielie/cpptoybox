@@ -8,10 +8,6 @@
 #include <tuple>
 #include <vector>
 
-#if __has_include(<format>)
-#include <format>
-#define USE_FORMAT
-#endif
 
 class FileRAII {
 public:
@@ -126,11 +122,7 @@ private:
                                       char delimiter) {
         if constexpr (I < sizeof...(Args)) {
             // 写入数据
-#ifdef USE_FORMAT
-            os << std::format("{}", std::get<I>(t));
-#else
             os << std::get<I>(t);
-#endif
 
             // 写入分隔符（如果是最后一个元素，则换成换行符）
             if constexpr (I < sizeof...(Args) - 1) { os << delimiter; }
@@ -141,4 +133,3 @@ private:
         }
     }
 };
-

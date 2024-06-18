@@ -90,7 +90,8 @@ public:
 
     void method(int m) {
         // 接受元会自动调用这个方法
-        std::cout << std::format("     {} receive {} ({})\n", m_name, m, int_receiver_kernel.num());
+        std::cout << "     " << m_the_name << " receive " << m << " ("
+                  << int_receiver_kernel.num() << ")\n";
     }
 };
 ```

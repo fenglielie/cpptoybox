@@ -1,11 +1,6 @@
 // main.cpp
 #include <string>
 
-#if __has_include(<format>)
-#include <format>
-#define USE_FORMAT
-#endif
-
 #include "msignal.hpp"
 
 // 具体的接收者
@@ -24,24 +19,16 @@ public:
 
     // receiver_exec会调用这个方法
     void method(int m) {
-#ifdef USE_FORMAT
-        std::cout << std::format("     {} receive {} ({})\n", m_the_name, m,
-                                 int_receiver_kernel.num());
-#else
         std::cout << "     " << m_the_name << " receive " << m << " ("
                   << int_receiver_kernel.num() << ")\n";
-#endif
+
         if (int_sender_kernel.num() > 0) { emit(m); }
     }
 
     void emit(int m) {
-#ifdef USE_FORMAT
-        std::cout << std::format("{} send {}: ({})\n", m_the_name, m,
-                                 int_sender_kernel.num());
-#else
         std::cout << m_the_name << " send " << m << ": ("
                   << int_sender_kernel.num() << ")\n";
-#endif
+
         int_sender_kernel.exec(m);
     }
 };
@@ -60,13 +47,9 @@ public:
     }
 
     void emit(int m) {
-#ifdef USE_FORMAT
-        std::cout << std::format("{} send {}: ({})\n", m_the_name, m,
-                                 int_sender_kernel.num());
-#else
         std::cout << m_the_name << " send " << m << ": ("
                   << int_sender_kernel.num() << ")\n";
-#endif
+
         int_sender_kernel.exec(m);
     }
 };
