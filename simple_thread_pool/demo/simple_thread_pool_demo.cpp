@@ -1,6 +1,8 @@
 #include "simple_thread_pool.hpp"
+
 #include <iostream>
 #include <stdexcept>
+#include <string>
 #include <thread>
 #include <vector>
 
