@@ -1,0 +1,4 @@
+add_executable(simple_thread_pool_demo simple_thread_pool_demo.cpp)
+target_include_directories(simple_thread_pool_demo PRIVATE ..)
+
+add_test(NAME simple_thread_pool_demo COMMAND simple_thread_pool_demo)
