@@ -5,6 +5,7 @@
 
 #include <chrono>
 #include <iostream>
+#include <mutex>
 #include <regex>
 #include <string>
 
@@ -108,19 +109,34 @@ public:
     // 格式例如[2016-06-21 20:54:11:123]
     static std::string time_stamp() {
         auto now = std::chrono::system_clock::now();
-        std::time_t now_time_t = std::chrono::system_clock::to_time_t(now);
+        auto now_time_t = std::chrono::system_clock::to_time_t(now);
+        auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+                          now.time_since_epoch())
+                      % 1000;
 
-        char buffer[32];
-        static_cast<void>(
-            strftime(static_cast<char *>(buffer), sizeof(buffer),
-                     "[%Y-%m-%d %H:%M:%S:", std::localtime(&now_time_t)));
+        char buffer[32]{};
 
-        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
-                      now.time_since_epoch())
-                  % 1000;
+        struct tm timeinfo {};
 
-        return std::string(static_cast<char *>(buffer))
-               + std::to_string(ms.count()) + "]";
+#if defined(_MSC_VER)
+        localtime_s(&timeinfo, &now_time_t);
+#elif defined(__unix__)
+        localtime_r(&now_time_t, &timeinfo);
+#else
+        static std::mutex mtx;
+        {
+            std::lock_guard<std::mutex> lock(mtx);
+            timeinfo = *localtime(&now_time_t);
+        }
+#endif
+
+        std::strftime(static_cast<char *>(buffer), sizeof(buffer),
+                      "[%Y-%m-%d %H:%M:%S", &timeinfo);
+
+        std::snprintf(static_cast<char *>(buffer) + 20, 6, ".%03d]",
+                      static_cast<int>(now_ms.count()));
+
+        return std::string{static_cast<char *>(buffer)};
     }
 
     // 等级输出
@@ -146,14 +162,29 @@ public:
     // 时间字符串 可用于日志文件名
     // 例如01-25-21-33
     static std::string date_string() {
-        static char buff[32];
-        std::time_t t_now = 0;
-        static_cast<void>(time(&t_now));
-        static_cast<void>(strftime(static_cast<char *>(buff), sizeof(buff),
-                                   "%m-%d-%H-%M-%S", localtime(&t_now)));
+        auto now = std::chrono::system_clock::now();
+        auto now_time_t = std::chrono::system_clock::to_time_t(now);
 
-        std::string result(static_cast<char *>(buff));  // 去掉年份
-        return result;
+        char buffer[32]{};
+
+        struct tm timeinfo {};
+
+#if defined(_MSC_VER)
+        localtime_s(&timeinfo, &now_time_t);
+#elif defined(__unix__)
+        localtime_r(&now_time_t, &timeinfo);
+#else
+        static std::mutex mtx;
+        {
+            std::lock_guard<std::mutex> lock(mtx);
+            timeinfo = *localtime(&now_time_t);
+        }
+#endif
+
+        std::strftime(static_cast<char *>(buffer), sizeof(buffer),
+                      "%m-%d-%H-%M-%S", &timeinfo);
+
+        return std::string{static_cast<char *>(buffer)};
     }
 
     // 判断文件名合法
