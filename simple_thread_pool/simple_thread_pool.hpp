@@ -75,11 +75,11 @@ private:
 
                     {
                         // 获取互斥锁
-                        std::unique_lock<std::mutex> mtx_guard(m_mtx);
+                        std::unique_lock<std::mutex> mtx_guard2(m_mtx);
 
                         // 通过条件变量让线程陷入等待
                         // 只有当前的任务队列非空或线程池已经被关闭时才会被成功唤醒
-                        this->m_cv.wait(mtx_guard, [this] {
+                        this->m_cv.wait(mtx_guard2, [this] {
                             return !this->m_running.load()
                                    || !this->m_tasks.empty();
                         });

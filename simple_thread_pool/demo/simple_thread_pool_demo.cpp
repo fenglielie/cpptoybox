@@ -22,8 +22,8 @@ int main() {
         // 提交任务
         if (i % 3 == 0) {
             auto func = [i]() -> int {
-                std::string msg = "Task " + std::to_string(i) + " executed\n";
-                std::cout << msg;
+                std::string msg2 = "Task " + std::to_string(i) + " executed\n";
+                std::cout << msg2;
                 std::this_thread::sleep_for(std::chrono::seconds(3 + i));
 
                 throw std::runtime_error("Exception in task "
@@ -32,14 +32,13 @@ int main() {
             results.emplace_back(pool.commit(func));
         }
         else {
-            int j = i + 1;
             auto func = [i](int j) -> int {
-                std::string msg = "Task " + std::to_string(i) + " executed\n";
-                std::cout << msg;
+                std::string msg2 = "Task " + std::to_string(i) + " executed\n";
+                std::cout << msg2;
                 std::this_thread::sleep_for(std::chrono::seconds(3 + i));
                 return i * j;
             };
-            results.emplace_back(pool.commit(func, j));
+            results.emplace_back(pool.commit(func, i+1));
         }
     }
 
