@@ -133,7 +133,7 @@ public:
         std::strftime(static_cast<char *>(buffer), sizeof(buffer),
                       "[%Y-%m-%d %H:%M:%S", &timeinfo);
 
-        std::snprintf(static_cast<char *>(buffer) + 20, 6, ".%03d]",
+        std::snprintf(static_cast<char *>(buffer) + 20, 7, ".%03d]",
                       static_cast<int>(now_ms.count()));
 
         return std::string{static_cast<char *>(buffer)};
