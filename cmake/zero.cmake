@@ -1,24 +1,23 @@
 # zero.cmake
-# 2024-04-01
+# fenglielie@qq.com
+# 2024-11-04
+
 ## marcos
 
 macro(zero_usage)
     message(STATUS "\n"
         "    ###################################\n"
         "    #                                 #\n"
-        "    #          CMakeZero 1.0          #\n"
+        "    #          CMakeZero 1.1          #\n"
         "    #                                 #\n"
         "    ###################################\n")
 
     message(STATUS "macro usage:\n"
-        "   - zero_init(): print usage, init the project (call after project)\n"
-        "   - zero_init_quiet(): init the project  (call after project)\n"
-        "   - zero_info(): show infomation\n"
         "   - zero_usage(): print this usage\n"
-        "   - zero_use_bin_subdir(): use bin/debug as runtime output directory when Debug\n"
-        "   - zero_add_my_rpath(): add environment variable ENV{MY_RPATH} to rpath\n"
-        "   - zero_enable_qt(): enable CMAKE_AUTOMOC,CMAKE_AUTOUIC,CMAKE_AUTORCC\n"
-        "   - zero_disable_qt(): disable CMAKE_AUTOMOC,CMAKE_AUTOUIC,CMAKE_AUTORCC\n")
+        "   - zero_init(): print usage, then init the project (call after project)\n"
+        "   - zero_init_quiet(): init the project (call after project)\n"
+        "   - zero_info(): show infomation\n"
+        "   - zero_use_bin_subdir(): use bin/debug as runtime output directory when debug\n")
 
     message(STATUS "function usage:\n"
         "   - zero_add_subdirs(src): go to src/CMakeLists.txt and src/*/CMakeLists.txt\n"
@@ -31,8 +30,8 @@ macro(zero_usage)
         "     * ZERO_TARGET_NAME=targetname\n"
         "     * ZERO_PROJECT_SOURCE_DIR=PROJECT_SOURCE_DIR\n"
         "     * ZERO_CURRENT_SOURCE_DIR=CMAKE_CURRENT_SOURCE_DIR\n"
-        "   - zero_target_use_postfix(targetname): add postfix _d when Debug (default in library)\n"
-        "   - zero_target_reset_output(targetname RUNTIME path): change RUNTIME output to path (RUNTIME|ARCHIVE|LIBRARY)\n"
+        "   - zero_target_use_postfix(targetname): add postfix _d when Debug (default for library)\n"
+        "   - zero_target_reset_output(targetname RUNTIME path): change RUNTIME(|ARCHIVE|LIBRARY) output to path\n"
         "   - zero_target_info(targetname): show target properties\n")
 
 endmacro()
@@ -84,7 +83,6 @@ macro(zero_init_quiet)
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
-
     # c/c++ compile flags
     if (("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
         set(common_flags  "-Wall -Wextra -Wfatal-errors -Wshadow -Wno-unused-parameter")
@@ -106,8 +104,6 @@ macro(zero_init_quiet)
     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} ${common_flags}")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${common_flags}")
 
-
-
 endmacro()
 
 macro(zero_info)
@@ -125,32 +121,10 @@ macro(zero_info)
     message(STATUS "-----------------------------------------------")
 endmacro()
 
-
 macro(zero_use_bin_subdir)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/bin")
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECT_SOURCE_DIR}/bin/debug")
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${PROJECT_SOURCE_DIR}/bin")
-endmacro()
-
-macro(zero_add_my_rpath)
-    if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-        if(DEFINED ENV{MY_RPATH})
-            list(PREPEND CMAKE_BUILD_RPATH $ENV{MY_RPATH})
-            list(PREPEND CMAKE_INSTALL_RPATH $ENV{MY_RPATH})
-        endif()
-    endif()
-endmacro()
-
-macro(zero_enable_qt)
-    set(CMAKE_AUTOMOC ON)
-    set(CMAKE_AUTOUIC ON)
-    set(CMAKE_AUTORCC ON)
-endmacro()
-
-macro(zero_disable_qt)
-    set(CMAKE_AUTOMOC OFF)
-    set(CMAKE_AUTOUIC OFF)
-    set(CMAKE_AUTORCC OFF)
 endmacro()
 
 ## functions
@@ -206,47 +180,46 @@ endfunction()
 # go to all relative subdirs which contains CMakeLists.txt from CMAKE_CURRENT_SOURCE_DIR.(not recurse)
 # may not ordered as you want.
 function(zero_add_subdirs _path)
-	# search all subdirs
+    # search all subdirs
     file(GLOB children LIST_DIRECTORIES ON CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${_path}/*)
-	set(dirs "")
-	list(PREPEND children "${CMAKE_CURRENT_SOURCE_DIR}/${_path}") # add first
+    set(dirs "")
+    list(PREPEND children "${CMAKE_CURRENT_SOURCE_DIR}/${_path}") # add first
 
     # append to dirs if contains CMakeLists.txt
     foreach(item ${children})
-		if((IS_DIRECTORY ${item}) AND (EXISTS "${item}/CMakeLists.txt"))
-			list(APPEND dirs ${item})
-		endif()
-	endforeach()
+        if((IS_DIRECTORY ${item}) AND (EXISTS "${item}/CMakeLists.txt"))
+            list(APPEND dirs ${item})
+        endif()
+    endforeach()
 
     # go to subdirs
     foreach(dir ${dirs})
         message(STATUS ">> Go to ${dir}")
-		add_subdirectory(${dir})
-	endforeach()
+        add_subdirectory(${dir})
+    endforeach()
 
 endfunction()
-
 
 # go to all relative subdirs which contains CMakeLists.txt from CMAKE_CURRENT_SOURCE_DIR.(recurse)
 # may not ordered as you want.
 function(zero_add_subdirs_rec _path)
-	# search all subdirs
-	file(GLOB_RECURSE children LIST_DIRECTORIES ON CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${_path}/*)
-	set(dirs "")
-	list(PREPEND children "${CMAKE_CURRENT_SOURCE_DIR}/${_path}") # add first
+    # search all subdirs
+    file(GLOB_RECURSE children LIST_DIRECTORIES ON CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${_path}/*)
+    set(dirs "")
+    list(PREPEND children "${CMAKE_CURRENT_SOURCE_DIR}/${_path}") # add first
 
     # append to dirs if contains CMakeLists.txt
     foreach(item ${children})
-		if((IS_DIRECTORY ${item}) AND (EXISTS "${item}/CMakeLists.txt"))
-			list(APPEND dirs ${item})
-		endif()
-	endforeach()
+        if((IS_DIRECTORY ${item}) AND (EXISTS "${item}/CMakeLists.txt"))
+            list(APPEND dirs ${item})
+        endif()
+    endforeach()
 
     # go to subdirs
-	foreach(dir ${dirs})
-		message(STATUS ">> Go to ${dir}")
-		add_subdirectory(${dir})
-	endforeach()
+    foreach(dir ${dirs})
+        message(STATUS ">> Go to ${dir}")
+        add_subdirectory(${dir})
+    endforeach()
 
 endfunction()
 
