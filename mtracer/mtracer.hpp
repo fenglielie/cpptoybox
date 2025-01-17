@@ -57,7 +57,7 @@ private:
 
 #define MTRACER MTracer MTRACER_CB(tmp_tracer_, __LINE__)
 #define MTRACER_DUMP_STRING MTracer::dump_result()
-#define MTRACER_DUMP_RESULT                                                    \
+#define MTRACER_DUMP                                                    \
     do { std::cerr << MTracer::dump_result(); } while (false)
 
 #else
@@ -65,6 +65,6 @@ private:
 #define MTRACER ((void)0)
 #define MTRACER_DUMP_STRING                                                    \
     std::string("\nMTracer: Define USE_MTRACER to use MTracer.\n")
-#define MTRACER_DUMP_RESULT ((void)0)
+#define MTRACER_DUMP ((void)0)
 
 #endif
