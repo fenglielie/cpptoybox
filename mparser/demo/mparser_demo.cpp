@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 
     if (!parser.parse(argc, argv)) {
         parser.print_usage();
-        return 0;
+        return 1;
     }
 
     auto rest = parser.get_rest();
