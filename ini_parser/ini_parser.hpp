@@ -42,9 +42,17 @@ public:
         std::string line;
         std::string cur_section;
         while (std::getline(f, line)) {
-            std::ranges::replace(line, '\n', ' ');
-            std::ranges::replace(line, '\r', ' ');
-            std::ranges::replace(line, '\t', ' ');
+            clean_str(line);
+
+            // 支持 \ 结尾表述跨行连接
+            while (!line.empty() && line.back() == '\\') {
+                line.pop_back();
+                std::string next_line;
+                if (std::getline(f, next_line)) {
+                    clean_str(next_line);
+                    line += next_line;
+                }
+            }
 
             // ':' -> '='
             std::size_t n_colon_start = line.find_first_of(':');
@@ -69,6 +77,7 @@ public:
                 continue;
             }
 
+            // add pair
             if (!add_pair(cur_section, line)) {
                 f.close();
                 throw std::runtime_error{"line parse error: " + line};
@@ -110,6 +119,12 @@ private:
             last_pos = s.find_first_not_of(delimiters, pos);
             pos = s.find_first_of(delimiters, last_pos);
         }
+    }
+
+    static void clean_str(std::string &str) {
+        std::ranges::replace(str, '\n', ' ');
+        std::ranges::replace(str, '\r', ' ');
+        std::ranges::replace(str, '\t', ' ');
     }
 
     static void trim_str(std::string &s, const std::string &delimiters) {
