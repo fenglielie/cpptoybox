@@ -1,6 +1,5 @@
 #include "mparser/mparser.hpp"
 
-
 int main(int argc, char *argv[]) {
     auto parser = MParser{};
 

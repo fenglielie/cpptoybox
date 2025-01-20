@@ -44,7 +44,7 @@ public:
         while (std::getline(f, line)) {
             clean_str(line);
 
-            // 支持 \ 结尾表述跨行连接
+            // support multiline
             while (!line.empty() && line.back() == '\\') {
                 line.pop_back();
                 std::string next_line;

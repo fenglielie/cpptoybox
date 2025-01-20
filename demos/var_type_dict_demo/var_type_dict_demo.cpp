@@ -18,8 +18,6 @@ auto fun(const TIn &in) {
     return a * weight + b * (1 - weight);
 }
 
-}  // namespace
-
 int test_var_type_dict_1() {
     std::cout << "Test named params 1\t";
     auto res = fun(Params1::init().set<B>(2.4).set<A>(1.3).set<Weight>(0.1));
@@ -60,5 +58,6 @@ int test_var_type_dict_2() {
 
     return 0;
 }
+}  // namespace
 
 int main() { return test_var_type_dict_1() + test_var_type_dict_2(); }

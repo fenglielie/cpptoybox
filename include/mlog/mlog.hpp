@@ -10,7 +10,7 @@
 #ifndef MLOG_H_
 #define MLOG_H_
 
-#include "mlog_macro.hpp"
+#include "mlog_macro.hpp"  // IWYU pragma: keep
 
 #include "mlogtool.hpp"
 
@@ -26,7 +26,6 @@
 一个是单例的MLogFileManager
 一个是单例的MLoggerManager，所有的MLogger对象在它的map中存在
 */
-
 
 // 提升常用的接口到MLog类
 class MLog {
@@ -107,7 +106,6 @@ public:
         return MLoggerManager::get_logger_when(Level::error, logger_name);
     }
 };
-
 
 // 加入一个别名，并且是小写的
 using mlog = MLog;  // NOLINT(readability-identifier-naming)

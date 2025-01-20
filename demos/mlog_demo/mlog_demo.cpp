@@ -2,6 +2,8 @@
 
 #include "mlog/mlog.hpp"
 
+namespace {
+
 void test(const std::string &name) {
     mlog::debug(name) << " 1 hello, debug-" << name << "\n";
     mlog::info(name) << " 2 hello, info-" << name << "\n";
@@ -37,6 +39,8 @@ void test2() {
         i++;
     }
 }
+
+}  // namespace
 
 int main(int argc, char *argv[]) {
     mlog::init(ZERO_CURRENT_SOURCE_DIR + std::string("/.mlog/"));

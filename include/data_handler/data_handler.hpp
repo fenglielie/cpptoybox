@@ -8,7 +8,6 @@
 #include <tuple>
 #include <vector>
 
-
 class FileRAII {
 public:
     FileRAII(const char *file_name, std::ios::openmode mode)
@@ -65,8 +64,8 @@ public:
 private:
     static void clean_line(std::string &line) {
         // 替换异常字符为空格
-        std::replace(line.begin(), line.end(), '\r', ' ');
-        std::replace(line.begin(), line.end(), '\t', ' ');
+        std::ranges::replace(line, '\r', ' ');
+        std::ranges::replace(line, '\t', ' ');
 
         // 删除行首行末的空格片段
         line.erase(0, line.find_first_not_of(' '));

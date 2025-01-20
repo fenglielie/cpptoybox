@@ -28,8 +28,7 @@ public:
 private:
     static std::string to_low(const std::string &raw_file_name) {
         std::string file_name = raw_file_name;
-        std::transform(file_name.begin(), file_name.end(), file_name.begin(),
-                       ::tolower);
+        std::ranges::transform(file_name, file_name.begin(), ::tolower);
         return file_name;
     }
 

@@ -162,7 +162,7 @@ private:
             if (count == 0) continue;
 
             info_one() << make_proper_str(count, "test", false) << " from "
-                       << it->first << "\n";
+                       << test_set_name << "\n";
 
             start_time_test_set = clock();
             // foreach test item
@@ -194,7 +194,7 @@ private:
             end_time_test_set = clock();
 
             info_one() << make_proper_str(count, "test", false) << " from "
-                       << it->first << " ("
+                       << test_set_name << " ("
                        << end_time_test_set - start_time_test_set
                        << " ms total)\n\n";
         }  // foreach test set
@@ -392,6 +392,8 @@ private:
             m_test_sets[test_set_name].emplace_back(item);
         }
         catch (...) {
+            std::cerr << "Failed to add test item: " << test_fullname << "\n";
+            exit(1);
         }
     }
 

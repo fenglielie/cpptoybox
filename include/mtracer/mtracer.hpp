@@ -19,7 +19,7 @@ public:
     MTracer &operator=(const MTracer &) = delete;
     MTracer(const MTracer &) = delete;
 
-    [[nodiscard]] static std::string dump_result() {
+    [[nodiscard]] static std::string dump_string() {
         std::stack<std::source_location> tracer_stack(get_stack());
 
         std::string str_result = "\nCall stack (MTRACER):";
@@ -56,9 +56,9 @@ private:
 #define MTRACER_CB(a, b) MTRACER_CB_INNER(a, b)
 
 #define MTRACER MTracer MTRACER_CB(tmp_tracer_, __LINE__)
-#define MTRACER_DUMP_STRING MTracer::dump_result()
-#define MTRACER_DUMP                                                    \
-    do { std::cerr << MTracer::dump_result(); } while (false)
+#define MTRACER_DUMP_STRING MTracer::dump_string()
+#define MTRACER_DUMP                                                           \
+    do { std::cerr << MTracer::dump_string(); } while (false)
 
 #else
 

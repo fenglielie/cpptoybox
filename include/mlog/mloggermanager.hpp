@@ -5,7 +5,6 @@
 
 #include <filesystem>
 
-
 // 负责日志等级判定
 class MLoggerManager {
 public:
@@ -26,7 +25,7 @@ public:
             logger_map()["cout"].log_start(Level::on,
                                            Format::LEVEL_SIGNATURE_TIME)
                 << " The logger named \"" << logger_name
-                << "\" already exists. Can not create it again.)" << std::endl;
+                << "\" already exists. Can not create it again.)\n";
 
             MLogTool::raise_error();
         }
@@ -50,8 +49,7 @@ public:
                                            Format::LEVEL_SIGNATURE_TIME)
                 << " Can not find a logger named \"" << logger_name
                 << "\". Please create it. (Maybe you forgot to use "
-                   "MLog::init().)"
-                << std::endl;
+                   "MLog::init().)\n";
 
             MLogTool::raise_error();
         }
@@ -132,7 +130,7 @@ public:
             ++iter;
         }
 
-        get_logger_cout().log_start(Level::off) << std::endl;
+        get_logger_cout().log_start(Level::off) << "\n";
     }
 
     //----------------------------------------------------------------------------//
@@ -151,6 +149,5 @@ private:
     // 基于map存储logger，必须具名
     std::map<const std::string, MLogger> m_logger_map;
 };
-
 
 #endif  // MLOGGERMANAGER_H_

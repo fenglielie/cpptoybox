@@ -118,6 +118,7 @@ struct VarTypeDict {
         Values() = default;
 
         // 输入一个std::shared_ptr<void>数组，移动存储到Values的私有成员中
+        // NOLINTNEXTLINE(cppcoreguidelines-rvalue-reference-param-not-moved)
         explicit Values(std::shared_ptr<void> (&&input)[sizeof...(TTypes)]) {
             for (size_t i = 0; i < sizeof...(TTypes); ++i) {
                 m_tuple[i] = std::move(input[i]);

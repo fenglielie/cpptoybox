@@ -9,7 +9,6 @@
 #include <iostream>
 #include <string>
 
-
 class MLogger {
 public:
     using Format = MLogTool::LogStartFormat;
@@ -364,7 +363,7 @@ private:
     std::shared_ptr<std::ofstream>
         m_logfile_ofstream;  // 指针可以空但是引用必须初始化并且无法改变
     std::string
-        m_file_name;  // 日志文件名是不含前缀的，并且需要通过文件名合法性检查
+        m_file_name;     // 日志文件名是不含前缀的，并且需要通过文件名合法性检查
     bool m_lock{false};  // 加锁后只可以使用输出，不能用对外接口改变输出方式
     Format m_log_start_format{
         Format::LEVEL_SIGNATURE};  // 普通日志默认使用的开头格式
@@ -374,20 +373,20 @@ private:
     // 提示打开日志文件，日志等级off，日志戳为等级和签名和时间
     MLogger &notice_open_file() {
         return log_start(Level::off, Format::LEVEL_SIGNATURE_TIME)
-               << " MLOG START" << std::endl;
+               << " MLOG START\n";
     }
 
     // 提示关闭日志文件，日志等级off，日志戳为等级和签名和时间
     MLogger &notice_close_file() {
         return log_start(Level::off, Format::LEVEL_SIGNATURE_TIME)
-               << " MLOG END" << std::endl;
+               << " MLOG END\n";
     }
 
     // 通知无效名称，然后报错退出
     void notice_invalid_name_and_exit(const std::string &new_logger_name) {
         log_start(Level::on, Format::LEVEL_SIGNATURE_TIME)
             << " Invalid logger name \"" << new_logger_name
-            << "\" can not be created." << std::endl;
+            << "\" can not be created.\n";
 
         MLogTool::raise_error();
     }
@@ -396,7 +395,7 @@ private:
     void notice_locked_and_exit() {
         log_start(Level::on, Format::LEVEL_SIGNATURE_TIME)
             << " The logger named \"" << m_name
-            << "\" has been locked, unable to change." << std::endl;
+            << "\" has been locked, unable to change.\n";
 
         MLogTool::raise_error();
     }
@@ -404,7 +403,7 @@ private:
     // 通知打开文件失败，然后报错退出
     void notice_open_file_failed_and_exit(const std::string &file_name) {
         log_start(Level::on, Format::LEVEL_SIGNATURE_TIME)
-            << " Can not open file \"" << file_name << "\"." << std::endl;
+            << " Can not open file \"" << file_name << "\".\n";
 
         MLogTool::raise_error();
     }
@@ -412,11 +411,10 @@ private:
     // 通知无效路径前缀，然后报错退出
     void notice_invalid_path_prefix_and_exit(const std::string &path_prefix) {
         log_start(Level::on, Format::LEVEL_SIGNATURE_TIME)
-            << " Invalid directory \"" << path_prefix << "\"." << std::endl;
+            << " Invalid directory \"" << path_prefix << "\".\n";
 
         MLogTool::raise_error();
     }
 };
-
 
 #endif  // MLOGGER_H_
