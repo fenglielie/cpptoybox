@@ -13,23 +13,23 @@ public:
     SafeInput(std::istream &in, std::ostream &out) : m_in(in), m_out(out) {}
 
     template <typename T, typename CheckerType>
-    T next(const std::string &msg, CheckerType checker, bool confirm) const {
-        return next_kernel<T>(msg, checker, confirm);
+    T get(const std::string &msg, CheckerType checker, bool confirm) const {
+        return get_kernel<T>(msg, checker, confirm);
     }
 
     template <typename T>
-    T next(const std::string &msg, bool confirm) const {
-        return next_kernel<T>(msg, [](T &) { return true; }, confirm);
+    T get(const std::string &msg, bool confirm) const {
+        return get_kernel<T>(msg, [](T &) { return true; }, confirm);
     }
 
     template <typename T, typename CheckerType>
-    T next(const std::string &msg, CheckerType checker) const {
-        return next_kernel<T>(msg, checker, false);
+    T get(const std::string &msg, CheckerType checker) const {
+        return get_kernel<T>(msg, checker, false);
     }
 
     template <typename T>
-    T next(const std::string &msg) const {
-        return next_kernel<T>(msg, [](T &) { return true; }, false);
+    T get(const std::string &msg) const {
+        return get_kernel<T>(msg, [](T &) { return true; }, false);
     }
 
     bool confirm(const std::string &msg) const {
@@ -51,7 +51,7 @@ public:
             return false;
         };
 
-        next_kernel<char>(msg + " (Y|N|Q): ", checker, false);
+        get_kernel<char>(msg + " (Y|N|Q): ", checker, false);
         return status;
     }
 
@@ -87,8 +87,8 @@ private:
     }
 
     template <typename T, typename CheckerType>
-    T next_kernel(const std::string &msg, CheckerType checker,
-                  bool confirm) const {
+    T get_kernel(const std::string &msg, CheckerType checker,
+                 bool confirm) const {
         check_type<T>();
         auto confirmer = [&](char s) {
             if (is_char(s, 'Y', 'y')) { return true; }
