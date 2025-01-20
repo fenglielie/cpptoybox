@@ -28,7 +28,7 @@ int main() {
         }
 
         ini.set("new_section", "new_key", "new_value");
-        ini.write(ZERO_CURRENT_SOURCE_DIR + std::string("/new_config.ini"),
+        ini.write(ZERO_CURRENT_SOURCE_DIR + std::string("/tmp_config.ini"),
                   std::ios::trunc);
     }
     catch (const std::exception &e) {
