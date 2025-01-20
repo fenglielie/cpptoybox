@@ -1,113 +1,145 @@
 #pragma once
 
-#include <array>
-#include <cassert>
-#include <cstddef>
-#include <cstdio>
-#include <ctime>
+#include <chrono>
+#include <format>
+#include <iostream>
+#include <string>
 
 class ProgressBar {
 public:
-    ProgressBar(double arg_end, bool disable_show, bool use_color)
-        : m_arg_end(arg_end), m_disable_show(disable_show),
-          m_use_color(use_color) {
-        assert(arg_end > 0 && "arg range illegal");
+    explicit ProgressBar(double arg_end)
+        : m_arg_end(arg_end), m_start_time(std::chrono::steady_clock::now()) {
+        if (m_arg_end <= 0) {
+            throw std::invalid_argument("arg_end must >= 0");
+        }
 
-        m_start_time = clock();
         m_last_time = m_start_time;
     }
 
-    void show(double arg_now, bool is_newline, bool is_end) {
-        show_detail(arg_now, is_newline, is_end);
+    void show(double arg_now) {
+        update(arg_now);
+
+        std::cout << "\r" << generate_str() << std::flush;
     }
 
-    void show(double arg_now) { show_detail(arg_now, false, false); }
+    void finished(double arg_now) {
+        update(arg_now);
 
-    void finished(double arg_now, bool is_newline) {
-        show_detail(arg_now, is_newline, true);
+        std::cout << std::format("\n Finished! Cost {:.2f}s\n", time_cost());
     }
-
-    void finished(double arg_now) { show_detail(arg_now, false, true); }
 
     double time_cost() const {
-        clock_t now_time = clock();
-        return static_cast<double>(now_time - m_start_time) / 1000;
+        auto time_now = std::chrono::steady_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+            time_now - m_start_time);
+        return static_cast<double>(duration.count()) / 1000.0;
     }
 
 private:
-    // dynamic char at the end of #
-    const std::array<char, 4> m_end_lables{'|', '/', '-', '\\'};
-    static constexpr int m_show_block_num_max = 20;
-    std::size_t m_lable_index = 0;
-    double m_arg_end;  // set by init
+    using TimePoint = std::chrono::steady_clock::time_point;
+
+    static constexpr int block_num = 20;
+    static constexpr char fill_char = '#';
+    static constexpr double alpha = 0.4;  // Smoothing factor
+
+    const double m_arg_end;
+    const TimePoint m_start_time;
+
+    TimePoint m_last_time;
     double m_last_arg = 0;
+    double m_last_rate = 0.0;
 
-    // information in last Show()
-    clock_t m_start_time;
-    clock_t m_last_time;
+    bool m_initialized = false;
 
-    const bool m_disable_show;
-    const bool m_use_color;
+    std::string generate_str() const {
+        // Calculate progress percentage and blocks
+        double pct = (m_last_arg / m_arg_end);
+        int filled_num = static_cast<int>(pct * block_num);
 
-    void show_detail(double arg_now, bool is_newline, bool is_end) {
-        assert((arg_now >= 0) && (arg_now <= m_arg_end) && "arg range illegal");
+        std::string color_code = calculate_color(pct);
 
-        // do nothing if disabled
-        if (m_disable_show) return;
+        // Construct progress bar
+        std::string bar_labels;
+        bar_labels.reserve(block_num);
+        bar_labels.append(filled_num, fill_char);
 
-        double arg_rate = arg_now * 100.0 / m_arg_end;
-        int show_block_num =
-            static_cast<int>(0.01 * arg_rate * m_show_block_num_max);
-
-        // newline
-        if (!is_newline) { printf("\r"); }
-        else { printf("\n"); }
-
-        if (m_use_color) { printf("\x1b[93m[%6.2lf%%][", arg_rate); }
-        else { printf("[%6.2lf%%][", arg_rate); }
-
-        // main
-        int cnt = 0;
-        for (cnt = 0; cnt < show_block_num; cnt++) { printf("#"); }
-        if (cnt < m_show_block_num_max) {
-            printf("%c", m_end_lables.at(m_lable_index));
-            ++cnt;
-            m_lable_index = (m_lable_index + 1) % 4;
-        }
-        while (cnt < m_show_block_num_max) {
-            printf(" ");
-            ++cnt;
+        if (filled_num < block_num) {
+            int last_char = static_cast<int>(pct * 100) % 10;
+            bar_labels.push_back(std::to_string(last_char)[0]);
+            bar_labels.append(block_num - filled_num - 1, ' ');
         }
 
-        if (is_end) {  // finished
-            printf("][%.2lf->%.2lf] Finished! Cost %.2lfs\n", arg_now,
-                   m_arg_end, time_cost());
+        // Prepare the output
+        std::string output =
+            std::format(" [{:6.2f}%][{}]", pct * 100, bar_labels);
+
+        auto predicted_time = (m_arg_end - m_last_arg) / m_last_rate;
+        output += std::format(" [{:.2f}->{:.2f}] {} ", m_last_arg, m_arg_end,
+                              format_prediction_time(predicted_time));
+
+        return color_code + output + "\033[0m";
+    }
+
+    void update(double arg_now) {
+        if (arg_now < 0 || arg_now > m_arg_end) { return; }  // out of range
+
+        auto time_now = std::chrono::steady_clock::now();
+
+        // Time prediction
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
+            time_now - m_last_time);
+        double elapsed_time = static_cast<double>(duration.count()) / 1000.0;
+
+        // Progress rate
+        double cur_rate = (arg_now - m_last_arg) / elapsed_time;
+
+        // If m_last_rate is illegal, use cur_rate only.
+        bool illegal_flag = std::isinf(m_last_rate) || std::isnan(m_last_rate);
+
+        if (!m_initialized || illegal_flag) {
+            m_last_rate = cur_rate;
+            m_initialized = true;
         }
-        else {  // unfinished
-            clock_t now_time = clock();
-            double next_time = (m_arg_end - arg_now) / (arg_now - m_last_arg)
-                               * (now_time - m_last_time) / 1000;
-            m_last_time = now_time;
-            m_last_arg = arg_now;
-
-            // prediction
-            if (next_time < 1200) {  // x < 20 min
-                printf("][%.2lf->%.2lf] %7.2lfs", arg_now, m_arg_end,
-                       next_time);
-            }
-            else if (next_time < 7200) {  // 20 min < x < 2h
-                printf("][%.2lf->%.2lf] %7.2lfm", arg_now, m_arg_end,
-                       next_time / 60);
-            }
-            else {  // 2h < x
-                printf("][%.2lf->%.2lf] %7.2lfh", arg_now, m_arg_end,
-                       next_time / 3600);
-            }
+        else {  // Apply exponential smoothing
+            m_last_rate = alpha * cur_rate + (1 - alpha) * m_last_rate;
         }
 
-        if (m_use_color) { printf("\x1b[0m"); }
+        // update
+        m_last_time = time_now;
+        m_last_arg = arg_now;
+    }
 
-        fflush(stdout);
-        return;
+    static std::string calculate_color(double pct) {
+        int r = 0;
+        int g = 0;
+        int b = 0;
+
+        if (pct < 0.5) {
+            // From yellow to green (0% to 50%)
+            r = 255;
+            g = static_cast<int>(255 * (pct / 0.5));
+            b = 0;
+        }
+        else {
+            // From green to blue (50% to 100%)
+            r = static_cast<int>(255 * (1 - (pct - 0.5) / 0.5));
+            g = 255;
+            b = static_cast<int>(255 * ((pct - 0.5) / 0.5));
+        }
+
+        // Return the ANSI escape code for 24-bit RGB color
+        return "\033[38;2;" + std::to_string(r) + ";" + std::to_string(g) + ";"
+               + std::to_string(b) + "m";
+    }
+
+    static std::string format_prediction_time(double predicted_time) {
+        if (predicted_time < 1200) {  // less than 20 minutes
+            return std::format("{:6.2f}s", predicted_time);
+        }
+        if (predicted_time < 7200) {  // less than 2 hours
+            return std::format("{:6.2f}m", predicted_time / 60);
+        }
+        // more than 2 hours
+        return std::format("{:6.2f}h", predicted_time / 3600);
     }
 };
