@@ -17,14 +17,14 @@ public:
         m_last_time = m_start_time;
     }
 
-    void show(double arg_now) {
-        update(arg_now);
+    void update(double arg_now) {
+        data_update(arg_now);
 
         std::cout << "\r" << generate_str() << std::flush;
     }
 
-    void finished(double arg_now) {
-        update(arg_now);
+    void finished() {
+        data_update(m_arg_end);
 
         std::cout << std::format("\n Finished! Cost {:.2f}s\n", time_cost());
     }
@@ -81,7 +81,7 @@ private:
         return color_code + output + "\033[0m";
     }
 
-    void update(double arg_now) {
+    void data_update(double arg_now) {
         if (arg_now < 0 || arg_now > m_arg_end) { return; }  // out of range
 
         auto time_now = std::chrono::steady_clock::now();
