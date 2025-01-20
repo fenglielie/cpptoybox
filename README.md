@@ -8,17 +8,17 @@ Allay is a collection of small C++ tools for practice, which are header-only lib
 
 
 
-1. **mtest**：A header-only testing framework mimicking gtest.
-2. **safe_input**：A component ensuring safe input handling.
-3. **msignal**：An observer pattern implementation for signal transmission.
-4. **mlog**： A simple logging library.
-5. **data_handler**：A component for reading and writing data files.
-6. **var_type_dict**：A heterogeneous dictionary based on template metaprogramming (reference: 《C++模板元编程实战：一个深度学习框架的初步实现》).
-7. **simple_thread_pool**：A simple C++ thread pool （[reference](https://www.limerence2017.com/2023/09/17/concpp07/)）.
-8. **mtracer**：A simple function call stack tracing component (using C++20's `std::source_location` instead of traditional `__FILE__` and others).
-9. **mparser**：A simple command-line parser.
-10. **ini_parser**：A simple INI file parser.
-11. **progressbar**：A simple command-line progress bar display.
+1. **mtest**: A header-only testing framework mimicking gtest.
+2. **safe_input**: A component ensuring safe input handling.
+3. **msignal**: An observer pattern implementation for signal transmission.
+4. **mlog**:  A simple logging library.
+5. **data_handler**: A component for reading and writing data files.
+6. **var_type_dict**: A heterogeneous dictionary based on template metaprogramming (reference: 《C++模板元编程实战：一个深度学习框架的初步实现》).
+7. **simple_thread_pool**: A simple C++ thread pool （[reference](https://www.limerence2017.com/2023/09/17/concpp07/)）.
+8. **mtracer**: A simple function call stack tracing component (using C++20's `std::source_location` instead of traditional `__FILE__` and others).
+9. **mparser**: A simple command-line parser.
+10. **ini_parser**: A simple INI file parser.
+11. **progressbar**: A simple command-line progress bar display.
 
 ---
 
