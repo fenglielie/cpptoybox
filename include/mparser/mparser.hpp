@@ -244,21 +244,21 @@ public:
         for (const auto &[key, desc] : fmt_option_data_required) {
             std::cout << "    " << std::left
                       << std::setw(static_cast<int>(max_length)) << key << desc
-                      << "\n";
+                      << '\n';
         }
 
         if (!fmt_option_data.empty()) { std::cout << " - Options:\n"; }
         for (const auto &[key, desc] : fmt_option_data) {
             std::cout << "    " << std::left
                       << std::setw(static_cast<int>(max_length)) << key << desc
-                      << "\n";
+                      << '\n';
         }
 
         if (!fmt_option_data.empty()) { std::cout << " - Flags:\n"; }
         for (const auto &[key, desc] : fmt_flag_data) {
             std::cout << "    " << std::left
                       << std::setw(static_cast<int>(max_length)) << key << desc
-                      << "\n";
+                      << '\n';
         }
     }
 

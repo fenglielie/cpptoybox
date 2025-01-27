@@ -5,10 +5,10 @@
 namespace {
 
 void test(const std::string &name) {
-    mlog::debug(name) << " 1 hello, debug-" << name << "\n";
-    mlog::info(name) << " 2 hello, info-" << name << "\n";
-    mlog::warn(name) << " 3 hello, warn-" << name << "\n";
-    mlog::error(name) << " 4 hello, error-" << name << "\n";
+    mlog::debug(name) << " 1 hello, debug-" << name << '\n';
+    mlog::info(name) << " 2 hello, info-" << name << '\n';
+    mlog::warn(name) << " 3 hello, warn-" << name << '\n';
+    mlog::error(name) << " 4 hello, error-" << name << '\n';
 }
 
 void prepare() {
@@ -32,9 +32,9 @@ void prepare() {
 void test2() {
     int i = 0;
     while (i < 200) {
-        MLOG_IF_FIRST_N(10) { MLOG_INFO("d") << "i = " << i << "\n"; }
-        MLOG_IF_EVERY_N(20) { MLOG_WARN("e") << "i = " << i << "\n"; }
-        MLOG_IF_MORETHAN_N(180) { MLOG_ERROR("f") << "i = " << i << "\n"; }
+        MLOG_IF_FIRST_N(10) { MLOG_INFO("d") << "i = " << i << '\n'; }
+        MLOG_IF_EVERY_N(20) { MLOG_WARN("e") << "i = " << i << '\n'; }
+        MLOG_IF_MORETHAN_N(180) { MLOG_ERROR("f") << "i = " << i << '\n'; }
 
         i++;
     }

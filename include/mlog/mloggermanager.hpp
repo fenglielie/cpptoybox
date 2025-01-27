@@ -117,7 +117,7 @@ public:
         get_logger_cout().log_start(Level::off) << " MLOG DETAIL\n";
         // 日志根目录
         get_logger_cout().log_start(Level::info)
-            << " log file dir: " << MLogFileManager::get_path_prefix() << "\n";
+            << " log file dir: " << MLogFileManager::get_path_prefix() << '\n';
 
         // 遍历所有拥有文件流的logger
         auto iter = logger_map().begin();
@@ -125,12 +125,12 @@ public:
             if (iter->second.m_logfile_ofstream) {
                 get_logger_cout().log_start(Level::info)
                     << " log file: " << iter->second.m_file_name
-                    << ", owner: " << iter->second.m_name << "\n";
+                    << ", owner: " << iter->second.m_name << '\n';
             }
             ++iter;
         }
 
-        get_logger_cout().log_start(Level::off) << "\n";
+        get_logger_cout().log_start(Level::off) << '\n';
     }
 
     //----------------------------------------------------------------------------//

@@ -26,7 +26,7 @@ public:
 
         std::size_t i = tracer_stack.size();
         while (!tracer_stack.empty()) {
-            std::string str_tmp = "\n" + std::to_string(i - 1) + ": "
+            std::string str_tmp = '\n' + std::to_string(i - 1) + ": "
                                   + format(tracer_stack.top());
             std::ranges::replace(str_tmp, '\\', '/');
             str_result += str_tmp;
@@ -34,7 +34,7 @@ public:
             --i;
         }
 
-        return str_result + "\n";
+        return str_result + '\n';
     }
 
     static std::string format(const std::source_location &location) {

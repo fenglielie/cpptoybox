@@ -46,7 +46,7 @@ public:
                 }
 
                 if (!expect_result()) {
-                    std::cout << info << "\n";
+                    std::cout << info << '\n';
                     return *this;
                 }
             }
@@ -56,7 +56,7 @@ public:
         template <typename T>
         static void evaluate_if_required(const char *str, T value) {
             if (std::to_string(value) != str) {
-                std::cout << "    Which is: " << value << "\n";
+                std::cout << "    Which is: " << value << '\n';
             }
         }
 
@@ -162,7 +162,7 @@ private:
             if (count == 0) continue;
 
             info_one() << make_proper_str(count, "test", false) << " from "
-                       << test_set_name << "\n";
+                       << test_set_name << '\n';
 
             start_time_test_set = clock();
             // foreach test item
@@ -170,7 +170,7 @@ private:
                 if (!test_set[i].match_filter) continue;
 
                 const char *fullname = test_set[i].fullname;
-                info_run() << fullname << "\n";
+                info_run() << fullname << '\n';
 
                 int tmp_fail_count = 0;
                 start_time_test_item = clock();
@@ -217,7 +217,7 @@ private:
             const TestSet &test_set = it->second;
             for (size_t i = 0; i < test_set.size(); i++) {
                 if (test_set[i].match_filter)
-                    msg_even_brief() << "  " << test_set[i].itemname << "\n";
+                    msg_even_brief() << "  " << test_set[i].itemname << '\n';
             }
         }
 
@@ -250,20 +250,20 @@ private:
         msg_even_brief() << "4. --mtest_brief\n"
                          << "   Enable brief output.\n";
 
-        msg_even_brief() << "\n";
+        msg_even_brief() << '\n';
         exit(0);
     }
 
     void show_note_main() const {
         if (!m_main_file.empty() && m_main_file != "main.cpp") {
             msg_even_brief()
-                << "Note: Running main() from " << m_main_file << "\n";
+                << "Note: Running main() from " << m_main_file << '\n';
         }
     }
 
     void show_note_filter() const {
         if (m_filter != "*")
-            msg_even_brief() << "Note: MTest filter = " << m_filter << "\n";
+            msg_even_brief() << "Note: MTest filter = " << m_filter << '\n';
     }
 
     void show_start() const {
@@ -297,7 +297,7 @@ private:
                 const TestSet &test_set = it->second;
                 for (size_t i = 0; i < test_set.size(); i++) {
                     if (!test_set[i].success) {
-                        info_failed() << test_set[i].fullname << "\n";
+                        info_failed() << test_set[i].fullname << '\n';
                     }
                 }
             }
@@ -305,13 +305,13 @@ private:
                 msg_even_brief()
                     << "\n " << m_color_red
                     << make_proper_str(m_test_fail_count, "FAILED TEST", true)
-                    << m_color_end << "\n";
+                    << m_color_end << '\n';
             }
             else {
                 msg_even_brief()
                     << "\n "
                     << make_proper_str(m_test_fail_count, "FAILED TEST", true)
-                    << "\n";
+                    << '\n';
             }
         }
     }
@@ -324,7 +324,7 @@ private:
      | |\\/| | | | |  _| \\___ \\ | |\n\
      | |  | | | | | |___ ___) || |\n\
      |_|  |_| |_| |_____|____/ |_|\n"
-                  << m_color_end << "\n";
+                  << m_color_end << '\n';
         }
         else {
             msg() << "\
@@ -333,7 +333,7 @@ private:
      | |\\/| | | | |  _| \\___ \\ | |\n\
      | |  | | | | | |___ ___) || |\n\
      |_|  |_| |_| |_____|____/ |_|\n"
-                  << "\n";
+                  << '\n';
         }
     }
 
@@ -392,7 +392,7 @@ private:
             m_test_sets[test_set_name].emplace_back(item);
         }
         catch (...) {
-            std::cerr << "Failed to add test item: " << test_fullname << "\n";
+            std::cerr << "Failed to add test item: " << test_fullname << '\n';
             exit(1);
         }
     }

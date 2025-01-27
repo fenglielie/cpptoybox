@@ -97,7 +97,7 @@ public:
                 f << "\n[" << section.first << "]\n";
             }
             for (const auto &pair : section.second) {
-                f << pair.first << " = " << pair.second << "\n";
+                f << pair.first << " = " << pair.second << '\n';
             }
         }
 

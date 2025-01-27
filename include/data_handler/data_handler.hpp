@@ -125,7 +125,7 @@ private:
 
             // 写入分隔符（如果是最后一个元素，则换成换行符）
             if constexpr (I < sizeof...(Args) - 1) { os << delimiter; }
-            else { os << "\n"; }
+            else { os << '\n'; }
 
             // 递归写入下一个元素
             write_tuple_to_stream<I + 1, Args...>(os, t, delimiter);

@@ -11,16 +11,16 @@
             << __FILE__ << ":" << __LINE__ << ": Failure\n";                   \
         if (strcmp(#cond, "==") == 0) {                                        \
             MTest::msg_even_brief() << "Expected equality of these values:\n"  \
-                                    << "  " << #x << "\n";                     \
+                                    << "  " << #x << '\n';                     \
             MTest::MTestMessage::evaluate_if_required(#x, x);                  \
-            MTest::msg_even_brief() << "  " << #y << "\n";                     \
+            MTest::msg_even_brief() << "  " << #y << '\n';                     \
             MTest::MTestMessage::evaluate_if_required(#y, y);                  \
         }                                                                      \
         else {                                                                 \
             MTest::msg_even_brief()                                            \
                 << "Expected: (" << #x << ") " << #cond << " (" << #y          \
                 << "), actual: " << std::to_string(x) << " vs "                \
-                << std::to_string(y) << "\n";                                  \
+                << std::to_string(y) << '\n';                                  \
         }                                                                      \
         *tmp_fail_count = *tmp_fail_count + 1;                                 \
     }                                                                          \
@@ -57,7 +57,7 @@
         MTest::MTestMessage::expect_result() = false;                          \
         MTest::msg_even_brief()                                                \
             << __FILE__ << ":" << __LINE__ << ": Failure\n"                    \
-            << "Value of: " << #x << "\n"                                      \
+            << "Value of: " << #x << '\n'                                      \
             << "  Actual: false\n"                                             \
             << "Expected: true\n";                                             \
         *tmp_fail_count = *tmp_fail_count + 1;                                 \
@@ -70,7 +70,7 @@
         MTest::MTestMessage::expect_result() = false;                          \
         MTest::msg_even_brief()                                                \
             << __FILE__ << ":" << __LINE__ << ": Failure\n"                    \
-            << "Value of: " << #x << "\n"                                      \
+            << "Value of: " << #x << '\n'                                      \
             << "  Actual: true\n"                                              \
             << "Expected: false\n";                                            \
         *tmp_fail_count = *tmp_fail_count + 1;                                 \
@@ -85,16 +85,16 @@
             << __FILE__ << ":" << __LINE__ << ": Failure\n";                   \
         if (strcmp(#cond, "==") == 0) {                                        \
             MTest::msg_even_brief() << "Expected equality of these values:\n"  \
-                                    << "  " << #x << "\n";                     \
+                                    << "  " << #x << '\n';                     \
             MTest::MTestMessage::evaluate_if_required(#x, x);                  \
-            MTest::msg_even_brief() << "  " << #y << "\n";                     \
+            MTest::msg_even_brief() << "  " << #y << '\n';                     \
             MTest::MTestMessage::evaluate_if_required(#y, y);                  \
         }                                                                      \
         else {                                                                 \
             MTest::msg_even_brief()                                            \
                 << "Expected: (" << #x << ") " << #cond << " (" << #y          \
                 << "), actual: " << std::to_string(x) << " vs "                \
-                << std::to_string(y) << "\n";                                  \
+                << std::to_string(y) << '\n';                                  \
         }                                                                      \
         *tmp_fail_count = *tmp_fail_count + 1;                                 \
         return;                                                                \
@@ -113,7 +113,7 @@
     if (!((x))) {                                                              \
         MTest::msg_even_brief()                                                \
             << __FILE__ << ":" << __LINE__ << ": Failure\n"                    \
-            << "Value of: " << #x << "\n"                                      \
+            << "Value of: " << #x << '\n'                                      \
             << "  Actual: false\n"                                             \
             << "Expected: true\n";                                             \
         *tmp_fail_count = *tmp_fail_count + 1;                                 \
@@ -124,7 +124,7 @@
     if (((x))) {                                                               \
         MTest::msg_even_brief()                                                \
             << __FILE__ << ":" << __LINE__ << ": Failure\n"                    \
-            << "Value of: " << #x << "\n"                                      \
+            << "Value of: " << #x << '\n'                                      \
             << "  Actual: true\n"                                              \
             << "Expected: false\n";                                            \
         *tmp_fail_count = *tmp_fail_count + 1;                                 \

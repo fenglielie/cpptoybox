@@ -18,7 +18,7 @@ int main() {
         for (int i = 0; i < 10; ++i) {
             std::string msg = "current available threads: "
                               + std::to_string(pool.get_idle_thread_num())
-                              + "\n";
+                              + '\n';
             std::cout << msg;
 
             // 提交任务
@@ -50,11 +50,11 @@ int main() {
         for (size_t i = 0; i < results.size(); ++i) {
             try {
                 std::string msg = "Result of task " + std::to_string(i) + ": "
-                                  + std::to_string(results[i].get()) + "\n";
+                                  + std::to_string(results[i].get()) + '\n';
                 std::cout << msg;
             }
             catch (const std::exception &e) {
-                std::cerr << "Exception caught: " << e.what() << "\n";
+                std::cerr << "Exception caught: " << e.what() << '\n';
             }
             catch (...) {
                 std::cerr << "Unknown exception caught\n";
@@ -62,7 +62,7 @@ int main() {
         }
     }
     catch (const std::exception &e) {
-        std::cerr << "Exception caught: " << e.what() << "\n";
+        std::cerr << "Exception caught: " << e.what() << '\n';
     }
 
     return 0;

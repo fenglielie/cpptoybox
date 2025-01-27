@@ -107,7 +107,7 @@ private:
             if (in(receiver) && checker(receiver)) {  // pass from checking
                 if (!confirm) break;                  // without confirmation
 
-                out("Get: ") << receiver << "\n";
+                out("Get: ") << receiver << '\n';
                 out("Confirm it? (Y|N|Q): ");
 
                 if (in(tmp) && confirmer(tmp)) break;  // after confirmation
