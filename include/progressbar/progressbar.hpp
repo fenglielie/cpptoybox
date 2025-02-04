@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <format>
@@ -10,25 +11,26 @@ class ProgressBar {
 public:
     explicit ProgressBar(double arg_end)
         : m_arg_end(arg_end), m_start_time(std::chrono::steady_clock::now()),
-          m_last_time(m_start_time) {}
+          m_last_time(m_start_time) {
+        if (m_arg_end <= 0.0) {
+            throw std::invalid_argument(
+                "ProgressBar: arg_end must be greater than 0");
+        }
+    }
 
     void update(double arg_now) {
-        data_update(arg_now);
+        update_data(arg_now);
 
         std::cout << "\r" << generate_str() << std::flush;
     }
 
-    void finished() {
-        update(m_arg_end);
-
-        std::cout << std::format(" Cost {:.2f}s\n", time_cost());
-    }
-
     double time_cost() const {
-        auto time_now = std::chrono::steady_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(
-            time_now - m_start_time);
-        return static_cast<double>(duration.count()) / 1000.0;  // in seconds
+        auto cost_duration =
+            std::chrono::duration_cast<std::chrono::milliseconds>(
+                m_last_time - m_start_time);
+        double cost_time = static_cast<double>(cost_duration.count()) / 1000.0;
+
+        return cost_time;  // in seconds
     }
 
 private:
@@ -46,15 +48,23 @@ private:
     bool m_initialized = false;
 
     std::string generate_str() const {
-        double pct = (m_last_arg / m_arg_end);
+        double pct = std::clamp(m_last_arg / m_arg_end, 0.0, 1.0);
         double eta_time = (m_arg_end - m_last_arg) / m_last_rate;
 
-        return std::format(" {}[{:6.2f}%][{}][{:.2f}->{:.2f}]{} \033[0m",
+        auto cost_duration =
+            std::chrono::duration_cast<std::chrono::milliseconds>(
+                m_last_time - m_start_time);
+        double cost_time = static_cast<double>(cost_duration.count()) / 1000.0;
+
+        return std::format(" {}[{:6.2f}%][{}][{:.2f}->{:.2f}] ET:{} RT:{}\033[0m",
                            color_label(pct), pct * 100, pct_bar(pct),
-                           m_last_arg, m_arg_end, time_str(eta_time));
+                           m_last_arg, m_arg_end, time_str(cost_time),
+                           time_str(eta_time));
     }
 
-    void data_update(double arg_now) {
+    void update_data(double arg_now) {
+        if (arg_now < m_last_arg) { return; }
+
         auto time_now = std::chrono::steady_clock::now();
 
         // Time prediction
@@ -103,31 +113,21 @@ private:
         return std::format("\033[38;2;{};{};{}m", r, g, b);
     }
 
-    static std::string time_str(double predicted_time) {
-        if (predicted_time < 1200) {  // less than 20 minutes
-            return std::format("{:6.2f}s", predicted_time);
+    static std::string time_str(double dt) {
+        if (dt < 1200) {  // < 20 minutes
+            return std::format("{:6.2f}s", dt);
         }
-        if (predicted_time < 7200) {  // less than 2 hours
-            return std::format("{:6.2f}m", predicted_time / 60);
+        if (dt < 7200) {  // < 2 hours
+            return std::format("{:6.2f}m", dt / 60);
         }
-        // more than 2 hours
-        return std::format("{:6.2f}h", predicted_time / 3600);
+        // > 2 hours
+        return std::format("{:6.2f}h", dt / 3600);
     }
 
     static std::string pct_bar(double pct) {
-        int filled_num = static_cast<int>(pct * block_num);
-
-        // Construct progress bar
-        std::string pct_bar;
-        pct_bar.reserve(block_num);
-        pct_bar.append(filled_num, fill_char);
-
-        if (filled_num < block_num) {
-            int last_char = static_cast<int>(pct * 100) % 10;
-            pct_bar.push_back(std::to_string(last_char)[0]);
-            pct_bar.append(block_num - filled_num - 1, ' ');
-        }
-
-        return pct_bar;
+        int filled_num =
+            std::clamp(static_cast<int>(pct * block_num), 0, block_num);
+        return std::string(filled_num, fill_char)
+               + std::string(block_num - filled_num, ' ');
     }
 };

@@ -12,7 +12,7 @@ int main() {
         // if (i % 10 == 0) { std::cout << i << '\n'; }
     }
 
-    demo.finished();
+    demo.update(2.0);
 
     return 0;
 }
