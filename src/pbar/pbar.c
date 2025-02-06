@@ -121,6 +121,12 @@ double pbar_time_cost(pbar *pb) {
     return pbar_time_diff(&pb->start_time, &tp_now);
 }
 
+static double pbar_clamp(double val, double m1, double m2) {
+    if (val < m1) { return m1; }
+    if (val > m2) { return m2; }
+    return val;
+}
+
 static void pbar_update_detail(pbar *pb, double arg_now, int stage_num,
                                char leading_char, char trailing_char) {
     int stage_old = (int)(pb->last_arg / pb->arg_end * stage_num);
@@ -130,7 +136,7 @@ static void pbar_update_detail(pbar *pb, double arg_now, int stage_num,
 
     if (stage_new == stage_old && stage_num > 0) { return; }
 
-    double pct = fmin(fmax(pb->last_arg / pb->arg_end, 0.0), 1.0);
+    double pct = pbar_clamp(pb->last_arg / pb->arg_end, 0.0, 1.0);
     double eta_time =
         (pb->last_rate > 0) ? (pb->arg_end - pb->last_arg) / pb->last_rate : 0;
     double cost_time = pbar_time_cost(pb);
