@@ -8,7 +8,7 @@ zero_info()
 zero_add_subdirs_rec(src)
 
 include(CTest)
-zero_add_subdirs_rec(demos)
+zero_add_subdirs_rec(demo)
 
 set(ALLAY_TARGETS
     mtest
