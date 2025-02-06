@@ -9,8 +9,18 @@
 
 class ProgressBar {
 public:
-    explicit ProgressBar(double arg_end)
-        : m_arg_end(arg_end), m_start_time(std::chrono::steady_clock::now()),
+    enum class Format {
+        PCT = 0,
+        ARG,
+        TIME,
+        PCT_BAR_ARG,
+        PCT_TIME,
+        PCT_BAR_ARG_TIME,
+    };
+
+    ProgressBar(double arg_end, Format format)
+        : m_fm(format), m_arg_end(arg_end),
+          m_start_time(std::chrono::steady_clock::now()),
           m_last_time(m_start_time) {
         if (m_arg_end <= 0.0) {
             throw std::invalid_argument(
@@ -18,10 +28,15 @@ public:
         }
     }
 
-    void update(double arg_now) {
-        update_data(arg_now);
+    explicit ProgressBar(double arg_end)
+        : ProgressBar(arg_end, Format::PCT_BAR_ARG_TIME) {}
 
-        std::cout << "\r" << generate_str() << std::flush;
+    void update(double arg_now, int stage_num) {
+        update_detail(arg_now, stage_num, '\r', '\0');
+    }
+
+    void update_newline(double arg_now, int stage_num) {
+        update_detail(arg_now, stage_num, '\0', '\n');
     }
 
     double time_cost() const {
@@ -37,6 +52,8 @@ private:
     static constexpr int block_num = 20;
     static constexpr char fill_char = '#';
     static constexpr double alpha = 0.4;  // Smoothing factor
+
+    const Format m_fm;
 
     const double m_arg_end;
     const std::chrono::steady_clock::time_point m_start_time;
@@ -56,10 +73,10 @@ private:
                 m_last_time - m_start_time);
         double cost_time = static_cast<double>(cost_duration.count()) / 1000.0;
 
-        return std::format(" {}[{:6.2f}%][{}][{:.2f}->{:.2f}] ET:{} RT:{}\033[0m",
-                           color_label(pct), pct * 100, pct_bar(pct),
-                           m_last_arg, m_arg_end, time_str(cost_time),
-                           time_str(eta_time));
+        return std::format(
+            " {}[{:6.2f}%][{}][{:.2f}->{:.2f}] ET:{} RT:{}\033[0m",
+            color_label(pct), pct * 100, pct_bar(pct), m_last_arg, m_arg_end,
+            time_str(cost_time), time_str(eta_time));
     }
 
     void update_data(double arg_now) {
@@ -89,6 +106,62 @@ private:
         // Update
         m_last_time = time_now;
         m_last_arg = arg_now;
+    }
+
+    void update_detail(double arg_now, int stage_num, char leading_char,
+                       char trailing_char) {
+        int stage_old = (int)(m_last_arg / m_arg_end * stage_num);
+        int stage_new = (int)(arg_now / m_arg_end * stage_num);
+
+        update_data(arg_now);
+
+        if (stage_new == stage_old && stage_num > 0) { return; }
+
+        double pct = std::clamp(m_last_arg / m_arg_end, 0.0, 1.0);
+        double eta_time = (m_arg_end - m_last_arg) / m_last_rate;
+
+        auto cost_duration =
+            std::chrono::duration_cast<std::chrono::milliseconds>(
+                m_last_time - m_start_time);
+        double cost_time = static_cast<double>(cost_duration.count()) / 1000.0;
+
+        switch (m_fm) {
+        case Format::PCT:
+            std::cout << std::format("{} {}{:6.2f}%\033[0m{}", leading_char,
+                                     color_label(pct), pct * 100,
+                                     trailing_char);
+            break;
+        case Format::ARG:
+            std::cout << std::format("{} {}{:.2f}->{:.2f}\033[0m{}",
+                                     leading_char, color_label(pct), m_last_arg,
+                                     m_arg_end, trailing_char);
+            break;
+        case Format::TIME:
+            std::cout << std::format("{} {}ET:{} RT:{}\033[0m{}", leading_char,
+                                     color_label(pct), time_str(cost_time),
+                                     time_str(eta_time), trailing_char);
+            break;
+        case Format::PCT_TIME:
+            std::cout << std::format("{} {}{:6.2f}% ET:{} RT:{}\033[0m{}",
+                                     leading_char, color_label(pct), pct * 100,
+                                     time_str(cost_time), time_str(eta_time),
+                                     trailing_char);
+            break;
+        case Format::PCT_BAR_ARG:
+            std::cout << std::format(
+                "{} {}[{:6.2f}%][{}][{:.2f}->{:.2f}]\033[0m{}", leading_char,
+                color_label(pct), pct * 100, pct_bar(pct), m_last_arg,
+                m_arg_end, trailing_char);
+            break;
+        case Format::PCT_BAR_ARG_TIME:
+            std::cout << std::format(
+                "{} {}[{:6.2f}%][{}][{:.2f}->{:.2f}] ET:{} RT:{}\033[0m{}",
+                leading_char, color_label(pct), pct * 100, pct_bar(pct),
+                m_last_arg, m_arg_end, time_str(cost_time), time_str(eta_time),
+                trailing_char);
+            break;
+        default: break;
+        }
     }
 
     static std::string color_label(double pct) {
