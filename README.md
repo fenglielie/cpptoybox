@@ -40,7 +40,32 @@ cd ./build
 ctest -j8
 ```
 
-run
+run xxx demo
 ```bash
 ./bin/xxx_demo
+```
+
+install
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="~/.local/"
+cmake --build build --target install
+```
+
+usage
+```cmake
+find_package(allay QUIET)
+if(NOT allay_FOUND)
+    include(FetchContent)
+    FetchContent_Declare(
+        allay
+        GIT_REPOSITORY https://github.com/fenglielie/allay.git
+        # GIT_REPOSITORY git@github.com:fenglielie/allay.git
+        GIT_TAG main
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    )
+    FetchContent_MakeAvailable(allay)
+endif()
+
+add_executable(demo demo.cpp)
+target_link_libraries(demo PRIVATE allay::pbar)
 ```
