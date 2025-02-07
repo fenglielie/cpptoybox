@@ -1,4 +1,4 @@
-#include "pbar/pbar.h"
+#include "allay/pbar/pbar.h"
 
 #include <math.h>
 #include <stdio.h>

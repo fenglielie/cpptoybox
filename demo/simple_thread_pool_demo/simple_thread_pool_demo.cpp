@@ -1,4 +1,4 @@
-#include "simple_thread_pool/simple_thread_pool.hpp"
+#include "allay/simple_thread_pool/simple_thread_pool.hpp"
 
 #include <iostream>
 #include <stdexcept>

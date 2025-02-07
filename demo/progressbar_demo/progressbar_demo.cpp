@@ -1,4 +1,4 @@
-#include "progressbar/progressbar.hpp"
+#include "allay/progressbar/progressbar.hpp"
 
 #include <thread>
 

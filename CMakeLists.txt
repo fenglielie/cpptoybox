@@ -35,4 +35,4 @@ install(EXPORT allayTargets
         FILE allayConfig.cmake
         NAMESPACE allay::
         DESTINATION lib/cmake/allay)
-install(DIRECTORY include/ DESTINATION include/allay)
+install(DIRECTORY include/allay DESTINATION include)

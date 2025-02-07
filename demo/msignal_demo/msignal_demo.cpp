@@ -1,7 +1,7 @@
 // main.cpp
 #include <string>
 
-#include "msignal/msignal.hpp"
+#include "allay/msignal/msignal.hpp"
 
 // 具体的接收者
 class TestReceiver {

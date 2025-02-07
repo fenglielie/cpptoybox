@@ -1,4 +1,4 @@
-#include "safe_input/safe_input.hpp"
+#include "allay/safe_input/safe_input.hpp"
 
 int main(int argc, char *argv[]) {
     auto s = SafeInput().get<int>("Please input a int in (0,5): ",
