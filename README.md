@@ -6,7 +6,6 @@
 
 Allay is a collection of small C++ tools for practice, which are header-only libraries unless otherwise specified.
 
-
 1. **mtest**: A header-only testing framework mimicking gtest.
 2. **safe_input**: A component ensuring safe input handling.
 3. **msignal**: An observer pattern implementation for signal transmission.
@@ -17,8 +16,9 @@ Allay is a collection of small C++ tools for practice, which are header-only lib
 8. **mtracer**: A simple function call stack tracing component (using C++20's `std::source_location` instead of traditional `__FILE__` and others).
 9. **mparser**: A simple command-line parser.
 10. **ini_parser**: A simple INI file parser.
-11. **progressbar**: A simple command-line progress bar display. (**pbar**：c version of progressbar)
-12. **gaussquad**: A Cpp implementation of [gaussquad](https://github.com/fenglielie/gaussquad) (MATLAB).
+11. **progressbar**: A simple command-line progress bar display.
+12. **pbar**：c version of progressbar.
+13. **gaussquad**: A Cpp implementation of [gaussquad](https://github.com/fenglielie/gaussquad) (MATLAB).
 
 ---
 
