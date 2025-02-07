@@ -16,5 +16,5 @@ if(FORMAT_SUPPORTED)
 
     add_test(NAME progressbar_demo COMMAND progressbar_demo)
 else()
-    message(WARNING "The compiler does not support C++20 <format>, skipping target 'progressbar_demo'.")
+    message(STATUS "The compiler does not support C++20 <format>, skipping target 'progressbar_demo'.")
 endif()
