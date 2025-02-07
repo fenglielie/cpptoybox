@@ -162,6 +162,8 @@ private:
             break;
         default: break;
         }
+
+        std::cout << std::flush;
     }
 
     static std::string color_label(double pct) {
