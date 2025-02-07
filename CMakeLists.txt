@@ -12,6 +12,7 @@ zero_add_subdirs_rec(demo)
 
 set(ALLAY_TARGETS
     mtest
+    mtest_main
     safe_input
     msignal
     mlog
@@ -22,7 +23,12 @@ set(ALLAY_TARGETS
     mparser
     ini_parser
     progressbar
+    pbar
 )
+
+foreach(target ${ALLAY_TARGETS})
+    add_library(allay::${target} ALIAS ${target})
+endforeach()
 
 install(TARGETS ${ALLAY_TARGETS} EXPORT allayTargets)
 install(EXPORT allayTargets
