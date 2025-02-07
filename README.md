@@ -17,7 +17,8 @@ Allay is a collection of small C++ tools for practice, which are header-only lib
 8. **mtracer**: A simple function call stack tracing component (using C++20's `std::source_location` instead of traditional `__FILE__` and others).
 9. **mparser**: A simple command-line parser.
 10. **ini_parser**: A simple INI file parser.
-11. **progressbar**: A simple command-line progress bar display. (**pbar**：c version of progressbar, cross-platform.)
+11. **progressbar**: A simple command-line progress bar display. (**pbar**：c version of progressbar)
+12. **gaussquad**: A Cpp implementation of [gaussquad](https://github.com/fenglielie/gaussquad) (MATLAB).
 
 ---
 
