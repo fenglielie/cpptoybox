@@ -10,6 +10,7 @@ zero_add_subdirs_rec(src)
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     include(CTest)
     zero_add_subdirs_rec(demo)
+    zero_add_subdirs_rec(test)
 endif()
 
 set(ALLAY_TARGETS
