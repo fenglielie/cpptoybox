@@ -19,6 +19,7 @@ Allay is a collection of small C++ tools for practice, which are header-only lib
 11. **progressbar**: A simple command-line progress bar display.
 12. **pbar**：c version of progressbar.
 13. **gaussquad**: A Cpp implementation of [gaussquad](https://github.com/fenglielie/gaussquad) (MATLAB).
+14. **windows_console**: A Windows-specific utility for handling console input/output with UTF-8 encoding and virtual terminal sequences.
 
 ---
 
