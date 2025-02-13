@@ -69,3 +69,11 @@ target_include_directories(gaussquad INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     $<INSTALL_INTERFACE:include>
 )
+
+if(WIN32)
+    add_library(windows_console INTERFACE)
+    target_include_directories(windows_console INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+        $<INSTALL_INTERFACE:include>
+    )
+endif()

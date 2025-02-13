@@ -29,6 +29,10 @@ set(ALLAY_TARGETS
     pbar
 )
 
+if(WIN32)
+    list(APPEND ALLAY_TARGETS windows_console)
+endif()
+
 foreach(target ${ALLAY_TARGETS})
     add_library(allay::${target} ALIAS ${target})
 endforeach()
