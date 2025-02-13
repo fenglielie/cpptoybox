@@ -4,7 +4,7 @@
   <img src="https://raw.githubusercontent.com/fenglielie/notes_image/main/img/allay_fly.gif" style="width: 50%" title="Allay"/>
 </div>
 
-Allay is a collection of small C++ tools for practice, which are header-only libraries unless otherwise specified.
+Allay is a collection of small C++ tools for practice, provided as header-only libraries unless otherwise specified.
 
 1. **mtest**: A header-only testing framework mimicking gtest.
 2. **safe_input**: A component ensuring safe input handling.
@@ -19,7 +19,7 @@ Allay is a collection of small C++ tools for practice, which are header-only lib
 11. **progressbar**: A simple command-line progress bar display.
 12. **pbar**：c version of progressbar.
 13. **gaussquad**: A Cpp implementation of [gaussquad](https://github.com/fenglielie/gaussquad) (MATLAB).
-14. **windows_console**: A Windows-specific utility for handling console input/output with UTF-8 encoding and virtual terminal sequences.
+14. **windows_console**: A Windows-specific utility for handling console input/output with UTF-8 encoding and virtual terminal sequences. ([reference 1](https://chariri.moe/archives/408/windows-cin-read-utf8/), [reference 2](https://stackoverflow.com/questions/48176431/reading-utf-8-characters-from-console))
 
 ---
 
